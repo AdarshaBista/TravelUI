@@ -1,0 +1,147 @@
+import 'package:travel_ui/models/place.dart';
+import 'package:travel_ui/models/category.dart';
+
+const String dummyDescription =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+
+List<Place> dummyPlaces = [
+  Place(
+    id: 1,
+    title: "Mount Rushmore",
+    imageUrl: "assets/images/MountRushmore.jpg",
+    lat: 43.8791,
+    lng: -103.4591,
+    distance: 456,
+    rating: 5,
+    description: dummyDescription,
+    category: "Monuments",
+  ),
+  Place(
+    id: 2,
+    title: "Eiffel Tower",
+    imageUrl: "assets/images/EiffelTower.jpg",
+    lat: 48.8584,
+    lng: 2.2945,
+    distance: 374,
+    rating: 4,
+    description: dummyDescription,
+    category: "Monuments",
+  ),
+  Place(
+    id: 3,
+    title: "Bali",
+    imageUrl: "assets/images/Bali.jpg",
+    lat: -8.3405,
+    lng: 115.0920,
+    distance: 88,
+    rating: 3,
+    description: dummyDescription,
+    category: "Recreations",
+  ),
+  Place(
+    id: 4,
+    title: "Hawaii",
+    imageUrl: "assets/images/Hawaii.jpg",
+    lat: 19.8968,
+    lng: -155.5828,
+    distance: 900,
+    rating: 2,
+    description: dummyDescription,
+    category: "Recreations",
+  ),
+  Place(
+    id: 5,
+    title: "Machhapuchhre",
+    imageUrl: "assets/images/Machhapuchhre.jpg",
+    lat: 28.5044,
+    lng: 83.9470,
+    distance: 5,
+    rating: 5,
+    description: dummyDescription,
+    category: "Mountains",
+  ),
+  Place(
+    id: 6,
+    title: "Everest",
+    imageUrl: "assets/images/Everest.jpg",
+    lat: 27.9881,
+    lng: 86.9250,
+    distance: 650,
+    rating: 3,
+    description: dummyDescription,
+    category: "Mountains",
+  ),
+  Place(
+    id: 7,
+    title: "Annapurna",
+    imageUrl: "assets/images/Annapurna.jpg",
+    lat: 28.5961,
+    lng: 83.8203,
+    distance: 875,
+    rating: 4,
+    description: dummyDescription,
+    category: "Mountains",
+  ),
+  Place(
+    id: 8,
+    title: "Fuji",
+    imageUrl: "assets/images/Fuji.jpg",
+    lat: 35.3606,
+    lng: 138.7274,
+    distance: 671,
+    rating: 4,
+    description: dummyDescription,
+    category: "Mountains",
+  ),
+  Place(
+    id: 9,
+    title: "El Porto Beach",
+    imageUrl: "assets/images/ElPorto.jpg",
+    lat: 33.9038,
+    lng: 118.4192,
+    distance: 1067,
+    rating: 1,
+    description: dummyDescription,
+    category: "Beaches",
+  ),
+];
+
+List<Category> dummyCategories = [
+  Category(
+    id: 1,
+    title: "Monuments",
+    rating: 5,
+    places: [
+      dummyPlaces[0],
+      dummyPlaces[1],
+    ],
+  ),
+  Category(
+    id: 2,
+    title: "Recreations",
+    rating: 3,
+    places: [
+      dummyPlaces[2],
+      dummyPlaces[3],
+    ],
+  ),
+  Category(
+    id: 3,
+    title: "Mountains",
+    rating: 3.5,
+    places: [
+      dummyPlaces[4],
+      dummyPlaces[5],
+      dummyPlaces[6],
+      dummyPlaces[7],
+    ],
+  ),
+  Category(
+    id: 4,
+    title: "Beaches",
+    rating: 4,
+    places: [
+      dummyPlaces[8],
+    ],
+  ),
+];
