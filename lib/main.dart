@@ -27,10 +27,10 @@ void _setTargetPlatformForDesktop() {
 
 void main() {
   _setTargetPlatformForDesktop();
-  runApp(travel_uiApp());
+  runApp(App());
 }
 
-class travel_uiApp extends StatelessWidget {
+class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -43,7 +43,7 @@ class travel_uiApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'travel_ui',
+        title: 'Travel UI',
         theme: ThemeData(
           brightness: Brightness.light,
           fontFamily: 'JosefinSans',

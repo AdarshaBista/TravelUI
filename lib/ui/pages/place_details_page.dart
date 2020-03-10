@@ -27,28 +27,7 @@ class PlaceDetailsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: backgroundColor,
         bottomNavigationBar: _buildTabBar(),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.map),
-          backgroundColor: primaryColor,
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 64.0),
-                  clipBehavior: Clip.antiAlias,
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: MapPage(
-                    center: LatLng(place.lat, place.lng),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+        floatingActionButton: _buildFab(context),
         body: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
@@ -59,6 +38,31 @@ class PlaceDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  FloatingActionButton _buildFab(BuildContext context) {
+    return FloatingActionButton(
+        child: Icon(Icons.map),
+        backgroundColor: primaryColor,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 64.0),
+                clipBehavior: Clip.antiAlias,
+                elevation: 8.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: MapPage(
+                  center: LatLng(place.lat, place.lng),
+                ),
+              );
+            },
+          );
+        },
+      );
   }
 
   TabBar _buildTabBar() => TabBar(

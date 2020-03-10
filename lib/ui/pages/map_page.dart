@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:travel_ui/api_keys.dart';
 import 'package:travel_ui/data/data.dart';
-
-import 'package:latlong/latlong.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:travel_ui/ui/styles/index.dart';
 
+import 'package:latlong/latlong.dart';
+
+import 'package:provider/provider.dart';
+import 'package:travel_ui/models/place.dart';
+import 'package:travel_ui/providers/place_provider.dart';
+
+import 'package:flutter_map/flutter_map.dart';
 import 'package:unicorndial/unicorndial.dart';
-import 'package:travel_ui/ui/widgets/discover_page/place_card.dart';
+import 'package:travel_ui/ui/widgets/map_page/place_card.dart';
 
 class MapPage extends StatefulWidget {
   final LatLng center;
@@ -38,65 +42,6 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
     super.initState();
     _mapController = MapController();
   }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      centerTitle: true,
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      title: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Text(
-          "Map",
-          style: mediumTextStyle.copyWith(color: Colors.white),
-        ),
-      ),
-    );
-  }
-
-  UnicornDialer _buildFab(BuildContext context) => UnicornDialer(
-        backgroundColor: Colors.black26,
-        parentButtonBackground: Theme.of(context).primaryColor,
-        orientation: UnicornOrientation.VERTICAL,
-        parentButton: Icon(Icons.layers),
-        finalButtonIcon: Icon(Icons.close),
-        childButtons: <UnicornButton>[
-          UnicornButton(
-            hasLabel: true,
-            labelText: "Map Style",
-            currentButton: FloatingActionButton(
-              heroTag: "mapStyle",
-              backgroundColor: Colors.orange,
-              mini: true,
-              child: Icon(Icons.style),
-              onPressed: () {
-                setState(() {
-                  _mapStyleIndex++;
-                });
-              },
-            ),
-          ),
-          UnicornButton(
-            hasLabel: true,
-            labelText: "Places",
-            currentButton: FloatingActionButton(
-              heroTag: "places",
-              backgroundColor: Colors.deepPurple,
-              mini: true,
-              child: Icon(Icons.place),
-              onPressed: () {
-                setState(() {
-                  _isPlaceVisible = !_isPlaceVisible;
-                });
-              },
-            ),
-          ),
-        ],
-      );
 
   void _animateMapTo(LatLng destLocation) {
     final destZoom = 16.0;
@@ -145,6 +90,67 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
     );
   }
 
+  AppBar _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      title: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Text(
+          "Map",
+          style: mediumTextStyle.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  UnicornDialer _buildFab(BuildContext context) {
+    return UnicornDialer(
+      backgroundColor: Colors.black26,
+      parentButtonBackground: Theme.of(context).primaryColor,
+      orientation: UnicornOrientation.VERTICAL,
+      parentButton: Icon(Icons.layers),
+      finalButtonIcon: Icon(Icons.close),
+      childButtons: <UnicornButton>[
+        UnicornButton(
+          hasLabel: true,
+          labelText: "Map Style",
+          currentButton: FloatingActionButton(
+            heroTag: "mapStyle",
+            backgroundColor: Colors.orange,
+            mini: true,
+            child: Icon(Icons.style),
+            onPressed: () {
+              setState(() {
+                _mapStyleIndex++;
+              });
+            },
+          ),
+        ),
+        UnicornButton(
+          hasLabel: true,
+          labelText: "Places",
+          currentButton: FloatingActionButton(
+            heroTag: "places",
+            backgroundColor: Colors.deepPurple,
+            mini: true,
+            child: Icon(Icons.place),
+            onPressed: () {
+              setState(() {
+                _isPlaceVisible = !_isPlaceVisible;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   TileLayerOptions _buildTiles() {
     return TileLayerOptions(
       keepBuffer: 8,
@@ -158,14 +164,15 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
   }
 
   MarkerLayerOptions _buildMarkers() {
+    final List<Place> allPlaces = Provider.of<PlaceProvider>(context).places;
     return MarkerLayerOptions(
       markers: [
         if (_isPlaceVisible)
-          for (int i = 0; i < dummyPlaces.length; ++i)
+          for (Place place in allPlaces)
             Marker(
               width: 80.0,
               height: 80.0,
-              point: LatLng(dummyPlaces[i].lat, dummyPlaces[i].lng),
+              point: LatLng(place.lat, place.lng),
               builder: (BuildContext context) => IconButton(
                 icon: Icon(Icons.place),
                 color: Colors.redAccent,
@@ -174,7 +181,7 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
                   showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return PlaceCard(place: dummyPlaces[i]);
+                      return PlaceCard(place: place);
                     },
                   );
                 },
