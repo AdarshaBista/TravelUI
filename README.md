@@ -4,4 +4,4 @@ Companion app for travellers concept UI.
 
 ## Demo
 
-<img height="480px" src="demo/demo.gif">
+![](demo/1.gif)
