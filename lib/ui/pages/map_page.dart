@@ -30,12 +30,6 @@ class MapPage extends StatefulWidget {
 class MapPageState extends State<MapPage> with TickerProviderStateMixin {
   MapController _mapController;
   bool _isPlaceVisible = true;
-  int _mapStyleIndex = 0;
-  final List<String> _mapStyles = [
-    'mapbox.satellite',
-    'mapbox.dark',
-    'mapbox.light',
-  ];
 
   @override
   void initState() {
@@ -43,18 +37,22 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
     _mapController = MapController();
   }
 
-  void _animateMapTo(LatLng destLocation) {
-    final destZoom = 16.0;
-    final _latTween = Tween<double>(begin: _mapController.center.latitude, end: destLocation.latitude);
-    final _lngTween = Tween<double>(begin: _mapController.center.longitude, end: destLocation.longitude);
+  void _animateMapTo(LatLng destLocation, [double zoom = 12.0]) {
+    final destZoom = zoom;
+    final _latTween =
+        Tween<double>(begin: _mapController.center.latitude, end: destLocation.latitude);
+    final _lngTween =
+        Tween<double>(begin: _mapController.center.longitude, end: destLocation.longitude);
     final _zoomTween = Tween<double>(begin: _mapController.zoom, end: destZoom);
 
-    AnimationController animController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
-    Animation<double> animation = CurvedAnimation(parent: animController, curve: Curves.fastOutSlowIn);
+    AnimationController animController =
+        AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
+    Animation<double> animation =
+        CurvedAnimation(parent: animController, curve: Curves.fastOutSlowIn);
 
     animController.addListener(() {
-      _mapController.move(
-          LatLng(_latTween.evaluate(animation), _lngTween.evaluate(animation)), _zoomTween.evaluate(animation));
+      _mapController.move(LatLng(_latTween.evaluate(animation), _lngTween.evaluate(animation)),
+          _zoomTween.evaluate(animation));
     });
 
     animation.addStatusListener((status) {
@@ -77,7 +75,9 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
         mapController: _mapController,
         options: MapOptions(
           zoom: 15.0,
-          center: widget.center == null ? LatLng(dummyPlaces[0].lat, dummyPlaces[0].lng) : widget.center,
+          center: widget.center == null
+              ? LatLng(dummyPlaces[0].lat, dummyPlaces[0].lng)
+              : widget.center,
           onTap: (LatLng tapPosition) {
             _animateMapTo(tapPosition);
           },
@@ -119,16 +119,17 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
       childButtons: <UnicornButton>[
         UnicornButton(
           hasLabel: true,
-          labelText: "Map Style",
+          labelText: "Zoom In",
           currentButton: FloatingActionButton(
-            heroTag: "mapStyle",
+            heroTag: "zoomIn",
             backgroundColor: Colors.orange,
             mini: true,
-            child: Icon(Icons.style),
+            child: Icon(Icons.zoom_in),
             onPressed: () {
-              setState(() {
-                _mapStyleIndex++;
-              });
+              LatLng center = widget.center == null
+                  ? LatLng(dummyPlaces[0].lat, dummyPlaces[0].lng)
+                  : widget.center;
+              _animateMapTo(center, 16.0);
             },
           ),
         ),
@@ -153,12 +154,15 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
 
   TileLayerOptions _buildTiles() {
     return TileLayerOptions(
+      tileProvider: NetworkTileProvider(),
       keepBuffer: 8,
-      urlTemplate: "https://api.tiles.mapbox.com/v4/"
-          "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+      tileSize: 512,
+      zoomOffset: -1,
+      urlTemplate:
+          "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}@2x?access_token={accessToken}",
       additionalOptions: {
         'accessToken': MAPBOX_ACCESS_TOKEN,
-        'id': _mapStyles[_mapStyleIndex % _mapStyles.length],
+        'id': 'mapbox/satellite-v9',
       },
     );
   }

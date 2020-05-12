@@ -11,7 +11,7 @@ class PlaceCardTile extends StatelessWidget {
         style: smallTextStyle,
       ),
       leading: CircleAvatar(
-        backgroundImage: AssetImage("assets/images/PrimeCollege.jpg"),
+        backgroundImage: AssetImage("assets/images/Bali.jpg"),
       ),
       children: <Widget>[
         Container(

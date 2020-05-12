@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:travel_ui/ui/styles/index.dart';
+import 'package:device_preview/device_preview.dart';
 
 import 'package:travel_ui/providers/place_provider.dart';
 import 'package:travel_ui/providers/category_provider.dart';
@@ -9,25 +13,26 @@ import 'package:travel_ui/providers/category_provider.dart';
 import 'package:flutter_villains/villain.dart';
 import 'package:travel_ui/ui/pages/bottom_nav_page.dart';
 
-// For Flutter Desktop Support. To be removed later
-import 'dart:io';
-import 'package:flutter/foundation.dart' show debugDefaultTargetPlatformOverride;
-
-void _setTargetPlatformForDesktop() {
-  TargetPlatform targetPlatform;
-  if (Platform.isMacOS) {
-    targetPlatform = TargetPlatform.iOS;
-  } else if (Platform.isLinux || Platform.isWindows) {
-    targetPlatform = TargetPlatform.android;
-  }
-  if (targetPlatform != null) {
-    debugDefaultTargetPlatformOverride = targetPlatform;
-  }
-}
-
 void main() {
-  _setTargetPlatformForDesktop();
-  runApp(App());
+  runApp(
+    DevicePreview(
+      enabled: Platform.isWindows,
+      usePreferences: false,
+      isToolBarVisible: true,
+      areSettingsEnabled: true,
+      style: DevicePreviewStyle(
+        background: BoxDecoration(color: Color(0xFF24292E)),
+        toolBar: DevicePreviewToolBarStyle.dark().copyWith(
+          position: DevicePreviewToolBarPosition.left,
+        ),
+      ),
+      data: DevicePreviewData(
+        deviceIndex: 3,
+        isFrameVisible: true,
+      ),
+      builder: (_) => (App()),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -42,6 +47,8 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        builder: DevicePreview.appBuilder,
+        locale: DevicePreview.of(context).locale,
         debugShowCheckedModeBanner: false,
         title: 'Travel UI',
         theme: ThemeData(
