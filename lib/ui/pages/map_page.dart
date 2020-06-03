@@ -11,7 +11,6 @@ import 'package:travel_ui/models/place.dart';
 import 'package:travel_ui/providers/place_provider.dart';
 
 import 'package:flutter_map/flutter_map.dart';
-import 'package:unicorndial/unicorndial.dart';
 import 'package:travel_ui/ui/widgets/map_page/place_card.dart';
 
 class MapPage extends StatefulWidget {
@@ -109,46 +108,18 @@ class MapPageState extends State<MapPage> with TickerProviderStateMixin {
     );
   }
 
-  UnicornDialer _buildFab(BuildContext context) {
-    return UnicornDialer(
-      backgroundColor: Colors.black26,
-      parentButtonBackground: Theme.of(context).primaryColor,
-      orientation: UnicornOrientation.VERTICAL,
-      parentButton: Icon(Icons.layers),
-      finalButtonIcon: Icon(Icons.close),
-      childButtons: <UnicornButton>[
-        UnicornButton(
-          hasLabel: true,
-          labelText: "Zoom In",
-          currentButton: FloatingActionButton(
-            heroTag: "zoomIn",
-            backgroundColor: Colors.orange,
-            mini: true,
-            child: Icon(Icons.zoom_in),
-            onPressed: () {
-              LatLng center = widget.center == null
-                  ? LatLng(dummyPlaces[0].lat, dummyPlaces[0].lng)
-                  : widget.center;
-              _animateMapTo(center, 16.0);
-            },
-          ),
-        ),
-        UnicornButton(
-          hasLabel: true,
-          labelText: "Places",
-          currentButton: FloatingActionButton(
-            heroTag: "places",
-            backgroundColor: Colors.deepPurple,
-            mini: true,
-            child: Icon(Icons.place),
-            onPressed: () {
-              setState(() {
-                _isPlaceVisible = !_isPlaceVisible;
-              });
-            },
-          ),
-        ),
-      ],
+  Widget _buildFab(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: Theme.of(context).primaryColor,
+      child: Icon(
+        Icons.zoom_in,
+        size: 24.0,
+      ),
+      onPressed: () {
+        LatLng center =
+            widget.center == null ? LatLng(dummyPlaces[0].lat, dummyPlaces[0].lng) : widget.center;
+        _animateMapTo(center, 16.0);
+      },
     );
   }
 

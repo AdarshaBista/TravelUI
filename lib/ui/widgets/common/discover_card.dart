@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:travel_ui/ui/styles/index.dart';
 import 'package:travel_ui/models/place.dart';
